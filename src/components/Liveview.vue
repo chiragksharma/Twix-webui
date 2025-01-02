@@ -80,10 +80,12 @@ export default {
 </script>
 
 <style>
+
 [canvas] {
     border: 2px solid gray;
     padding: 1px;
     border-radius: 5px;
     max-width: 100%;
+    
 }
 </style>

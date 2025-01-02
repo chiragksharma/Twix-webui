@@ -524,7 +524,7 @@ function addToLiveviewData(obj, state) {
 
 function addToLogData(obj, state) {
     state.logData.unshift(`[${obj.timeStamp}] ${obj.function}: ${obj.message}`);
-    if (state.logData.length > 100) {
+    if (state.logData.length > 100) { 
         state.logData = state.logData.slice(0, 100);
     }
 }

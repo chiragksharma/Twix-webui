@@ -1,11 +1,11 @@
 import '@babel/polyfill';
 import 'mutationobserver-shim';
 import Vue from 'vue';
-import App from './App.vue';
+import App from './App.vue'; // THe main container for entire application
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
-import VueCookies from 'vue-cookies';
+import VueCookies from 'vue-cookies'; // Cookkie management
 import VueNativeSock from 'vue-native-websocket';
 import VueSpinners from 'vue-spinners';
 import 'leaflet/dist/leaflet.css';
@@ -16,7 +16,7 @@ if (process.env.VUE_APP_PIXELIT_HOST !== undefined) {
     Vue.prototype.$pixelitHost = process.env.VUE_APP_PIXELIT_HOST;
 } else {
     Vue.prototype.$pixelitHost = location.host;
-}
+} 
 
 if (process.env.VUE_APP_API_SERVER !== undefined) {
     Vue.prototype.$apiServerBaseURL = process.env.VUE_APP_API_SERVER;
@@ -24,7 +24,7 @@ if (process.env.VUE_APP_API_SERVER !== undefined) {
     Vue.prototype.$apiServerBaseURL = 'https://pixelit.bastelbunker.de/api';
 }
 
-Vue.prototype.$client = 'PixelIt-Webui';
+Vue.prototype.$client = 'Twix-webapp';
 
 Vue.use(VueSpinners);
 Vue.use(VueCookies);
