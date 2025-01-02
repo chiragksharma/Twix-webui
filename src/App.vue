@@ -4,45 +4,77 @@
         <v-app-bar app>
             <v-toolbar-title><b>Twix</b> - Every Pixel Says Something</v-toolbar-title>
             <v-spacer></v-spacer>
-            <div v-if="displayHostname" class="hostname padded" :title="`Hostname: ${this.displayHostname}`" v-text="displayHostname"></div>
-            <v-icon v-if="sockedIsConnected" color="green" class="padded" :title="`Connected to ${this.$socket.url}`">mdi-lan-connect</v-icon>
-            <v-icon v-else color="red" class="padded" :title="`Disconnected from ${this.$socket.url}`">mdi-lan-disconnect</v-icon>
+            <div
+                v-if="displayHostname"
+                class="hostname padded"
+                :title="`Hostname: ${this.displayHostname}`"
+                v-text="displayHostname"
+            ></div>
+            <v-icon
+                v-if="!isDemoMode && sockedIsConnected"
+                color="green"
+                class="padded"
+                :title="`Connected to ${this.$socket?.url || ''}`"
+            >
+                mdi-lan-connect
+            </v-icon>
+            <v-icon
+                v-if="isDemoMode"
+                color="green"
+                class="padded"
+                title="Demo Mode - Connected to demo data source"
+            >
+                mdi-lan-connect
+            </v-icon>
+            <v-icon
+                v-else-if="!sockedIsConnected && !isDemoMode"
+                color="red"
+                class="padded"
+                title="Disconnected from WebSocket"
+            >
+                mdi-lan-disconnect
+            </v-icon>
             <v-btn icon @click="changeTheme" title="Change Theme">
                 <v-icon>{{ darkModeActive ? 'mdi-brightness-4' : 'mdi-brightness-4' }}</v-icon>
             </v-btn>
         </v-app-bar>
 
-        <!-- Tabs -->
-        <v-tabs v-model="activeTab" align-with-title>
-            <v-tab v-for="tab in tabs" :key="tab.name">
-                {{ tab.label }}
-            </v-tab>
-        </v-tabs>
-
-        <!-- Content -->
+        <!-- Main Content -->
         <v-main>
             <v-container>
+                <!-- Live View Section -->
                 <v-row>
                     <v-col cols="12">
-                        <!-- Live Preview Section -->
-                        <v-card elevation="4" class="pa-4">
+                        <div class="live-view-container">
                             <h2 class="text-center">Live Preview</h2>
-                            <div class="live-preview">
-                                <Liveview class="text-center" :data="liveview" :options="liveviewCanvasSettings" />
-                            </div>
-                        </v-card>
+                            <Liveview
+                                class="text-center"
+                                :data="liveview"
+                                :options="liveviewCanvasSettings"
+                            />
+                        </div>
                     </v-col>
                 </v-row>
+
+                <!-- Tabs Section -->
                 <v-row>
                     <v-col cols="12">
-                        <router-view :key="activeTab"></router-view>
+                        <v-tabs v-model="activeTab" align-with-title>
+                            <v-tab v-for="tab in tabs" :key="tab.name">
+                                {{ tab.label }}
+                            </v-tab>
+                        </v-tabs>
+                        <v-tabs-items v-model="activeTab">
+                            <v-tab-item v-for="tab in tabs" :key="tab.name">
+                                <router-view :key="tab.name" />
+                            </v-tab-item>
+                        </v-tabs-items>
                     </v-col>
                 </v-row>
             </v-container>
         </v-main>
     </v-app>
 </template>
-
 
 <script>
 import Liveview from './components/Liveview.vue';
@@ -61,16 +93,19 @@ export default {
     }),
     computed: {
         sockedIsConnected() {
-            return this.$store.state.socket.isConnected;
+            return this.isDemoMode || this.$store.state.socket?.isConnected;
+        },
+        isDemoMode() {
+            return this.$demoMode;
         },
         displayHostname() {
-            return this.$store.state.displayHostname;
+            return this.$store.state.displayHostname || (this.isDemoMode ? 'Demo Mode' : '');
         },
         liveview() {
-            return this.$store.state.liveviewData;
+            return this.$store.state.liveviewData || [];
         },
         liveviewCanvasSettings() {
-            return this.$store.state.matrixSize;
+            return this.$store.state.matrixSize || {};
         },
         darkModeActive() {
             return this.$vuetify.theme.dark;
