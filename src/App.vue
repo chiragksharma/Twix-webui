@@ -56,8 +56,8 @@
                     </v-col>
                 </v-row>
 
-                <!-- Tabs Section -->
-                <v-row>
+                <!-- Tabs Section (for larger screens) -->
+                <v-row class="d-none d-md-flex">
                     <v-col cols="12">
                         <v-tabs v-model="activeTab" align-with-title>
                             <v-tab v-for="tab in tabs" :key="tab.name">
@@ -66,29 +66,64 @@
                         </v-tabs>
                         <v-tabs-items v-model="activeTab">
                             <v-tab-item v-for="tab in tabs" :key="tab.name">
-                                <router-view :key="tab.name" />
+                                <component :is="currentComponent" />
                             </v-tab-item>
                         </v-tabs-items>
                     </v-col>
                 </v-row>
+
+                <!-- Tabs Content Section (for mobile screens) -->
+                <v-row class="d-md-none mobile-content">
+                    <v-col cols="12">
+                        <component :is="currentComponent" />
+                    </v-col>
+                </v-row>
+
+                <!-- Bottom Navigation (for mobile screens) -->
+                <v-bottom-navigation v-model="activeTab" class="d-md-none scrollable-tabs" app>
+                    <div class="scrollable-container">
+                        <v-btn
+                            v-for="(tab, index) in tabs"
+                            :key="tab.name"
+                            @click="activeTab = index"
+                        >
+                            <v-icon>{{ tab.icon }}</v-icon>
+                        </v-btn>
+                    </div>
+                </v-bottom-navigation>
             </v-container>
         </v-main>
     </v-app>
 </template>
 
+
+
 <script>
-import Liveview from './components/Liveview.vue';
+import Liveview from "./components/Liveview.vue";
+import HomeView from './views/Home.vue';
+import SettingsView from './views/Options.vue';
+import CreatorView from './views/Creator.vue';
+import StatisticsView from './views/Statistics.vue';
+import SensorsButtonsView from './views/SensorsButtons.vue';
 
 export default {
     name: 'App',
-    components: { Liveview },
+    components: { 
+        Liveview,
+        HomeView, 
+        SettingsView, 
+        CreatorView, 
+        StatisticsView, 
+        SensorsButtonsView 
+    },
     data: () => ({
         activeTab: 0,
         tabs: [
-            { name: 'home', label: 'Home' },
-            { name: 'settings', label: 'Settings' },
-            { name: 'gallery', label: 'Gallery' },
-            { name: 'creator', label: 'Creator' },
+            { name: 'home', label: 'Home', component: 'HomeView', icon: 'mdi-home' },
+            { name: 'settings', label: 'Settings', component: 'SettingsView', icon: 'mdi-cog' },
+            { name: 'creator', label: 'Creator', component: 'mdi-pencil', icon: 'mdi-pencil' },
+            { name: 'statistics', label: 'Statistics', component: 'StatisticsView', icon: 'mdi-chart-bar' },
+            { name: 'sensorsbuttons', label: 'Sensors & Buttons', component: 'SensorsButtonsView', icon: 'mdi-gesture-tap-button' },
         ],
     }),
     computed: {
@@ -110,6 +145,10 @@ export default {
         darkModeActive() {
             return this.$vuetify.theme.dark;
         },
+        currentComponent() {
+            // Dynamically get the component for the active tab
+            return this.tabs[this.activeTab]?.component || 'HomeView';
+        },
     },
     methods: {
         changeTheme() {
@@ -118,6 +157,9 @@ export default {
         },
     },
 };
+
+
+
 </script>
 
 <style>
@@ -166,5 +208,33 @@ export default {
 .v-tabs {
     background-color: #2196f3;
     color: #fff;
+}
+
+.mobile-content {
+    margin-bottom: 64px; /* Provide space for the bottom navigation */
+    padding-bottom: 16px;
+}
+
+.scrollable-tabs {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.scrollable-container {
+    display: inline-flex; /* Ensure all buttons are displayed inline */
+    width: max-content; /* Ensure the container width matches its content */
+}
+
+.scrollable-tabs::-webkit-scrollbar {
+    height: 6px; /* Make the scrollbar smaller for better UX */
+}
+
+.scrollable-tabs::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4); /* Styled thumb */
+    border-radius: 4px;
+}
+
+.scrollable-tabs::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); /* Styled track */
 }
 </style>

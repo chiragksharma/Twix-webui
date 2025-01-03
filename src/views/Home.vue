@@ -1,8 +1,9 @@
 <template>
     <v-container class="home">
         <v-row>
+            <!-- System Card -->
             <v-col cols="12" lg="3">
-                <v-card class="pa-2" elevation="4">
+                <v-card class="pa-2" elevation="4" @click="openDrawer('system')">
                     <v-card-title>
                         <h2>System</h2>
                     </v-card-title>
@@ -15,8 +16,10 @@
                     <ListInfo :items="systemItems" />
                 </v-card>
             </v-col>
+
+            <!-- Liveview Card -->
             <v-col cols="12" lg="3">
-                <v-card class="pa-2" elevation="4">
+                <v-card class="pa-2" elevation="4" @click="openDrawer('liveview')">
                     <v-card-title>
                         <h2>Liveview</h2>
                     </v-card-title>
@@ -25,7 +28,9 @@
                     <Liveview class="text-center" :data="liveview" :options="liveviewCanvasSettings" />
                 </v-card>
                 <br />
-                <v-card class="pa-2" elevation="4">
+
+                <!-- Sensors Card -->
+                <v-card class="pa-2" elevation="4" @click="openDrawer('sensors')">
                     <v-card-title>
                         <h2>Sensors</h2>
                     </v-card-title>
@@ -34,7 +39,9 @@
                     <ListInfo :items="sensorItems" />
                 </v-card>
                 <br />
-                <v-card class="pa-2" elevation="4">
+
+                <!-- Buttons Card -->
+                <v-card class="pa-2" elevation="4" @click="openDrawer('buttons')">
                     <v-card-title>
                         <h2>Buttons</h2>
                     </v-card-title>
@@ -43,8 +50,10 @@
                     <ListInfo :items="buttonItems" />
                 </v-card>
             </v-col>
+
+            <!-- Logs Card -->
             <v-col cols="12" lg="6">
-                <v-card class="pa-2" elevation="4">
+                <v-card class="pa-2" elevation="4" @click="openDrawer('logs')">
                     <v-card-title>
                         <h2>Logs</h2>
                     </v-card-title>
@@ -53,28 +62,55 @@
                     <Log :log="log" />
                 </v-card>
                 <br />
-                <v-card class="pa-2" elevation="4">
+
+                <!-- Usermap Card -->
+                <v-card class="pa-2" elevation="4" @click="openDrawer('usermap')">
                     <v-card-title>
                         <h2>Usermap</h2>
                     </v-card-title>
                     <hr />
                     <v-card-text class="text-md-center" v-if="userMapError || sendStatistics == false">
                         <h2>Activate the telemetry data to see the usermap.</h2>
-                        <br>
+                        <br />
                         <h4>To activate the telemetry data, go to <a href="/#/options"><b>Options</b> and activate <b>"Send Telemetry data"</b></a></h4>
                         <small>After activation, it can take up to one minute for the data to become visible.</small>
                     </v-card-text>
                     <div v-else>
-                        <p></p>                    
+                        <p></p>
                         <UserMap :coords="userMapData" height="500px" />
                     </div>
                 </v-card>
             </v-col>
         </v-row>
+
+        <!-- Dynamic Drawer -->
+        <v-navigation-drawer
+            v-model="drawer"
+            app
+            right
+            temporary
+            width="400"
+        >
+            <v-toolbar flat dense>
+                <v-toolbar-title>{{ currentTitle }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="closeDrawer">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-divider></v-divider>
+
+            <!-- Render the dynamic component -->
+            <component :is="currentComponent" />
+        </v-navigation-drawer>
     </v-container>
 </template>
 
+
 <script>
+import IconsDrawer from '../components/drawers/IconsDrawer.vue';
+import BrightnessDrawer from '../components/drawers/BrightnessDrawer.vue';
+import SettingsDrawer from '../components/drawers/SettingsDrawer.vue';
 import Log from '../components/Log';
 import ListInfo from '../components/ListInfo';
 import UserMap from '../components/UserMap';
@@ -87,6 +123,16 @@ export default {
         ListInfo,
         UserMap,
         Liveview,
+        IconsDrawer,
+        BrightnessDrawer,
+        SettingsDrawer,
+    },
+    data() {
+        return {
+            drawer: false, // Drawer visibility
+            currentComponent: null, // Current drawer component
+            currentTitle: '', // Current drawer title
+        };
     },
     computed: {
         systemItems() {
@@ -129,8 +175,30 @@ export default {
             return this.$store.state.configData.sendTelemetry;
         },
     },
+    methods: {
+        openDrawer(type) {
+            this.drawer = true;
+            if (type === 'liveview') {
+                this.currentComponent = 'IconsDrawer';
+                this.currentTitle = 'Liveview Settings';
+            } else if (type === 'sensors') {
+                this.currentComponent = 'BrightnessDrawer';
+                this.currentTitle = 'Sensor Settings';
+            } else if (type === 'buttons') {
+                this.currentComponent = 'SystemDrawer';
+                this.currentTitle = 'Button Settings';
+            } else if (type === 'settings') {
+                this.currentComponent = 'SettingsDrawer';
+                this.currentTitle = 'Settings';
+            }
+        },
+        closeDrawer() {
+            this.drawer = false;
+        },
+    },
 };
 </script>
+
 <style scoped>
 .updateMessage {
     color: rgb(255, 102, 0);
