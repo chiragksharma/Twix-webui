@@ -3,7 +3,7 @@
         <v-row>
             <!-- System Card -->
             <v-col cols="12" lg="3">
-                <v-card class="pa-2" elevation="4" @click="openDrawer('system')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('system')">
                     <v-card-title>
                         <h2>System</h2>
                     </v-card-title>
@@ -19,7 +19,7 @@
 
             <!-- Liveview Card -->
             <v-col cols="12" lg="3">
-                <v-card class="pa-2" elevation="4" @click="openDrawer('liveview')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('liveview')">
                     <v-card-title>
                         <h2>Liveview</h2>
                     </v-card-title>
@@ -30,7 +30,7 @@
                 <br />
 
                 <!-- Sensors Card -->
-                <v-card class="pa-2" elevation="4" @click="openDrawer('sensors')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('sensors')">
                     <v-card-title>
                         <h2>Sensors</h2>
                     </v-card-title>
@@ -41,7 +41,7 @@
                 <br />
 
                 <!-- Buttons Card -->
-                <v-card class="pa-2" elevation="4" @click="openDrawer('buttons')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('buttons')">
                     <v-card-title>
                         <h2>Buttons</h2>
                     </v-card-title>
@@ -53,7 +53,7 @@
 
             <!-- Logs Card -->
             <v-col cols="12" lg="6">
-                <v-card class="pa-2" elevation="4" @click="openDrawer('logs')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('logs')">
                     <v-card-title>
                         <h2>Logs</h2>
                     </v-card-title>
@@ -64,7 +64,7 @@
                 <br />
 
                 <!-- Usermap Card -->
-                <v-card class="pa-2" elevation="4" @click="openDrawer('usermap')">
+                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('usermap')">
                     <v-card-title>
                         <h2>Usermap</h2>
                     </v-card-title>
@@ -200,6 +200,12 @@ export default {
 </script>
 
 <style scoped>
+.custom-card {
+    border-radius: 16px;
+    border: 5px solid rgba(14, 13, 13, 0.12);
+    box-shadow: none !important;
+    background-color: #ffffff;
+}
 .updateMessage {
     color: rgb(255, 102, 0);
     font-weight: bold;
