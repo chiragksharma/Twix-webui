@@ -96,34 +96,29 @@
     </v-app>
 </template>
 
-
-
 <script>
 import Liveview from "./components/Liveview.vue";
 import HomeView from './views/Home.vue';
-import SettingsView from './views/Options.vue';
 import CreatorView from './views/Creator.vue';
-import StatisticsView from './views/Statistics.vue';
+import SettingsView from './views/Options.vue';
 import SensorsButtonsView from './views/SensorsButtons.vue';
 
 export default {
     name: 'App',
-    components: { 
+    components: {
         Liveview,
-        HomeView, 
-        SettingsView, 
-        CreatorView, 
-        StatisticsView, 
-        SensorsButtonsView 
+        HomeView,
+        CreatorView,
+        SettingsView,
+        SensorsButtonsView,
     },
     data: () => ({
         activeTab: 0,
         tabs: [
             { name: 'home', label: 'Home', component: 'HomeView', icon: 'mdi-home' },
+            { name: 'apps', label: 'Apps', component: 'CreatorView', icon: 'mdi-apps' },
             { name: 'settings', label: 'Settings', component: 'SettingsView', icon: 'mdi-cog' },
-            { name: 'creator', label: 'Creator', component: 'mdi-pencil', icon: 'mdi-pencil' },
-            { name: 'statistics', label: 'Statistics', component: 'StatisticsView', icon: 'mdi-chart-bar' },
-            { name: 'sensorsbuttons', label: 'Sensors & Buttons', component: 'SensorsButtonsView', icon: 'mdi-gesture-tap-button' },
+            { name: 'custom', label: 'Custom', component: 'SensorsButtonsView', icon: 'mdi-wrench' },
         ],
     }),
     computed: {
@@ -157,34 +152,7 @@ export default {
         },
     },
 };
-
-
-
 </script>
-
-<style>
-::-webkit-scrollbar {
-    width: 20px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background-color: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background-color: #8c8c8c;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background-color: #a8a8a8;
-}
-</style>
 
 <style scoped>
 .hostname {

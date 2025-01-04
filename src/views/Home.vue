@@ -1,84 +1,90 @@
 <template>
     <v-container class="home">
-        <v-row>
-            <!-- System Card -->
-            <v-col cols="12" lg="3">
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('system')">
-                    <v-card-title>
-                        <h2>System</h2>
+        <v-row justify="space-between">
+            <!-- WiFi Details Card -->
+            <v-col cols="12" md="5" lg="4">
+                <v-card class="pa-4 custom-card" elevation="4">
+                    <v-card-title class="card-title">
+                        <h2>WiFi Details</h2>
                     </v-card-title>
-                    <hr />
-                    <br />
-                    <div class="text-center updateMessage" v-if="newVersionAvailable && !isDemoMode">
-                        <a class="updateMessage" :href="gitUpdateURL" target="_blank">Update to version {{ gitVersion }} available!</a>
-                        <v-icon size="16px" class="updateMessage">mdi-open-in-new</v-icon>
-                    </div>
-                    <ListInfo :items="systemItems" />
-                </v-card>
-            </v-col>
-
-            <!-- Liveview Card -->
-            <v-col cols="12" lg="3">
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('liveview')">
-                    <v-card-title>
-                        <h2>Liveview</h2>
-                    </v-card-title>
-                    <hr />
-                    <br />
-                    <Liveview class="text-center" :data="liveview" :options="liveviewCanvasSettings" />
-                </v-card>
-                <br />
-
-                <!-- Sensors Card -->
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('sensors')">
-                    <v-card-title>
-                        <h2>Sensors</h2>
-                    </v-card-title>
-                    <hr />
-                    <br />
-                    <ListInfo :items="sensorItems" />
-                </v-card>
-                <br />
-
-                <!-- Buttons Card -->
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('buttons')">
-                    <v-card-title>
-                        <h2>Buttons</h2>
-                    </v-card-title>
-                    <hr />
-                    <br />
-                    <ListInfo :items="buttonItems" />
-                </v-card>
-            </v-col>
-
-            <!-- Logs Card -->
-            <v-col cols="12" lg="6">
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('logs')">
-                    <v-card-title>
-                        <h2>Logs</h2>
-                    </v-card-title>
-                    <hr />
-                    <br />
-                    <Log :log="log" />
-                </v-card>
-                <br />
-
-                <!-- Usermap Card -->
-                <v-card class="pa-4 custom-card" elevation="4" @click="openDrawer('usermap')">
-                    <v-card-title>
-                        <h2>Usermap</h2>
-                    </v-card-title>
-                    <hr />
-                    <v-card-text class="text-md-center" v-if="userMapError || sendStatistics == false">
-                        <h2>Activate the telemetry data to see the usermap.</h2>
-                        <br />
-                        <h4>To activate the telemetry data, go to <a href="/#/options"><b>Options</b> and activate <b>"Send Telemetry data"</b></a></h4>
-                        <small>After activation, it can take up to one minute for the data to become visible.</small>
+                    <v-divider class="light-divider" />
+                    <v-card-text class="card-text">
+                        <div><strong>SSID:</strong> {{ wifiDetails.ssid }}</div>
+                        <div><strong>IP Address:</strong> {{ wifiDetails.ip }}</div>
+                        <div><strong>Signal Strength:</strong> {{ wifiDetails.signalStrength }}%</div>
                     </v-card-text>
-                    <div v-else>
-                        <p></p>
-                        <UserMap :coords="userMapData" height="500px" />
-                    </div>
+                    <v-card-actions>
+                        <v-btn class="button" @click="openDrawer('wifi')">Change</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+
+            <!-- Update Info Card -->
+            <v-col cols="12" md="5" lg="4">
+                <v-card class="pa-4 custom-card" elevation="4">
+                    <v-card-title class="card-title">
+                        <h2>Update</h2>
+                    </v-card-title>
+                    <v-divider class="light-divider" />
+                    <v-card-text class="card-text">
+                        <div v-if="newVersionAvailable">
+                            <strong>Update available!</strong> Current Version: {{ currentVersion }}
+                        </div>
+                        <div v-else>
+                            <strong>Your system is up-to-date.</strong> Version: {{ currentVersion }}
+                        </div>
+                    </v-card-text>
+                    <v-card-actions >
+                        <v-btn class="button" color="primary" @click="updateSystem">Update</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+
+            <!-- Battery Info Card -->
+            <v-col cols="12" md="5" lg="4">
+                <v-card class="pa-4 custom-card" elevation="4">
+                    <v-card-title class="card-title">
+                        <h2>Battery Info</h2>
+                    </v-card-title>
+                    <v-divider class="light-divider" />
+                    <v-card-text class="card-text">
+                        <div><strong>Battery Level:</strong> {{ batteryInfo.level }}%</div>
+                        <div><strong>Status:</strong> {{ batteryInfo.status }}</div>
+                        <div><strong>Charging:</strong> {{ batteryInfo.isCharging ? 'Yes' : 'No' }}</div>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+
+            <!-- Contact Us Card -->
+            <v-col cols="12" md="5" lg="4">
+                <v-card class="pa-4 custom-card" elevation="4">
+                    <v-card-title class="card-title">
+                        <h2>Contact Us</h2>
+                    </v-card-title>
+                    <v-divider class="light-divider" />
+                    <v-card-text class="card-text">
+                        <p>If you are facing any issues, feel free to contact us:</p>
+                        <div><strong>Email:</strong> support@example.com</div>
+                        <div><strong>Phone:</strong> +1-234-567-890</div>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+
+            <!-- Setup Instructions Card -->
+            <v-col cols="12" lg="8">
+                <v-card class="pa-4 custom-card" elevation="4">
+                    <v-card-title class="card-title">
+                        <h2>Setup Instructions</h2>
+                    </v-card-title>
+                    <v-divider class="light-divider" />
+                    <v-card-text class="card-text">
+                        <ol>
+                            <li>Connect the device to power.</li>
+                            <li>Configure WiFi settings through the app.</li>
+                            <li>Ensure the device is connected to the internet.</li>
+                            <li>Follow the on-screen instructions to complete the setup.</li>
+                        </ol>
+                    </v-card-text>
                 </v-card>
             </v-col>
         </v-row>
@@ -106,94 +112,42 @@
     </v-container>
 </template>
 
-
 <script>
-import IconsDrawer from '../components/drawers/IconsDrawer.vue';
-import BrightnessDrawer from '../components/drawers/BrightnessDrawer.vue';
-import SettingsDrawer from '../components/drawers/SettingsDrawer.vue';
-import Log from '../components/Log';
-import ListInfo from '../components/ListInfo';
-import UserMap from '../components/UserMap';
-import Liveview from '../components/Liveview';
-
 export default {
     name: 'Home',
-    components: {
-        Log,
-        ListInfo,
-        UserMap,
-        Liveview,
-        IconsDrawer,
-        BrightnessDrawer,
-        SettingsDrawer,
-    },
     data() {
         return {
             drawer: false, // Drawer visibility
             currentComponent: null, // Current drawer component
             currentTitle: '', // Current drawer title
+            wifiDetails: {
+                ssid: 'YourWiFi',
+                ip: '192.168.1.100',
+                signalStrength: 85,
+            },
+            batteryInfo: {
+                level: 75,
+                status: 'Good',
+                isCharging: true,
+            },
+            newVersionAvailable: true, // Simulate version availability
+            currentVersion: '1.0.0',
         };
-    },
-    computed: {
-        systemItems() {
-            return this.$store.state.sysInfoData;
-        },
-        sensorItems() {
-            return this.$store.state.sensorData;
-        },
-        buttonItems() {
-            return this.$store.state.buttonData;
-        },
-        log() {
-            return this.$store.state.logData.join('\n');
-        },
-        newVersionAvailable() {
-            return this.$store.state.newVersionAvailable;
-        },
-        gitVersion() {
-            return this.$store.state.gitVersion;
-        },
-        gitUpdateURL() {
-            return this.$store.state.gitDownloadUrl;
-        },
-        userMapData() {
-            return this.$store.state.userMapData.coords;
-        },
-        userMapError() {            
-            return this.$store.state.userMapData.error;             
-        },  
-        isDemoMode() {
-            return this.$demoMode;
-        },
-        liveview() {
-            return this.$store.state.liveviewData;
-        },
-        liveviewCanvasSettings() {
-            return this.$store.state.matrixSize;
-        },
-        sendStatistics(){
-            return this.$store.state.configData.sendTelemetry;
-        },
     },
     methods: {
         openDrawer(type) {
             this.drawer = true;
-            if (type === 'liveview') {
-                this.currentComponent = 'IconsDrawer';
-                this.currentTitle = 'Liveview Settings';
-            } else if (type === 'sensors') {
-                this.currentComponent = 'BrightnessDrawer';
-                this.currentTitle = 'Sensor Settings';
-            } else if (type === 'buttons') {
-                this.currentComponent = 'SystemDrawer';
-                this.currentTitle = 'Button Settings';
-            } else if (type === 'settings') {
-                this.currentComponent = 'SettingsDrawer';
-                this.currentTitle = 'Settings';
+            if (type === 'wifi') {
+                this.currentComponent = 'SettingsDrawer'; // Replace with your WiFi settings drawer
+                this.currentTitle = 'WiFi Settings';
             }
         },
         closeDrawer() {
             this.drawer = false;
+        },
+        updateSystem() {
+            alert('Update initiated!');
+            // Logic for triggering system update
         },
     },
 };
@@ -205,9 +159,36 @@ export default {
     border: 5px solid rgba(14, 13, 13, 0.12);
     box-shadow: none !important;
     background-color: #ffffff;
+    min-height: 250px; /* Set a consistent height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure content is well spaced */
 }
-.updateMessage {
-    color: rgb(255, 102, 0);
+.button{
+    width: 100%;
+    justify-content: center; 
+    background-color: transparent !important;
+    padding: 26px !important;
+    border: 2px solid rgba(0, 0, 0, 0.1) ;
+    border-radius: 5px;
+    box-shadow: none !important;
+}
+.card-title h2 {
+    font-size: 1.5rem; /* Increase font size for titles */
     font-weight: bold;
+    margin: 0;
+}
+
+.card-text {
+    font-size: 1.125rem; /* Increase font size for text */
+    line-height: 1.5;
+}
+
+.light-divider {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
+    margin-bottom: 16px;
 }
 </style>
