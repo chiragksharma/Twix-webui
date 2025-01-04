@@ -2,5 +2,5 @@ module.exports = {
   transpileDependencies: [
     'vuetify'
   ],
-  publicPath: process.env.NODE_ENV === 'production' ? 'https://pixelit-project.github.io/PixelIt/webui/' : '/'
+  publicPath: process.env.NODE_ENV === 'production' ? 'https://chiragksharma.github.io/Twix-webui/' : '/'
 }
