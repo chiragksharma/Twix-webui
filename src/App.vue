@@ -99,8 +99,8 @@
 <script>
 import Liveview from "./components/Liveview.vue";
 import HomeView from './views/Home.vue';
-import CreatorView from './views/Creator.vue';
 import SettingsView from './views/Options.vue';
+import Apps from "./views/Apps.vue";
 import SensorsButtonsView from './views/SensorsButtons.vue';
 
 export default {
@@ -108,7 +108,7 @@ export default {
     components: {
         Liveview,
         HomeView,
-        CreatorView,
+        Apps,
         SettingsView,
         SensorsButtonsView,
     },
@@ -116,7 +116,7 @@ export default {
         activeTab: 0,
         tabs: [
             { name: 'home', label: 'Home', component: 'HomeView', icon: 'mdi-home' },
-            { name: 'apps', label: 'Apps', component: 'CreatorView', icon: 'mdi-apps' },
+            { name: 'apps', label: 'Apps', component: 'Apps', icon: 'mdi-apps' },
             { name: 'settings', label: 'Settings', component: 'SettingsView', icon: 'mdi-cog' },
             { name: 'custom', label: 'Custom', component: 'SensorsButtonsView', icon: 'mdi-wrench' },
         ],
@@ -143,6 +143,9 @@ export default {
         currentComponent() {
             // Dynamically get the component for the active tab
             return this.tabs[this.activeTab]?.component || 'HomeView';
+        },
+        apps() {
+            return this.$store.state.apps || []; // Default to an empty array if no apps are available
         },
     },
     methods: {

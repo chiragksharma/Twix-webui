@@ -450,6 +450,7 @@ export default new Vuex.Store({
         bmpsFromAPI: [],
         pixelCreatorPixel: {},
         telemetryData: '',
+        apps:[],
         userMapData: { coords: [] },
         statistics: {},
     },
@@ -500,6 +501,13 @@ export default new Vuex.Store({
             // Liveview
             if (message.liveview) {
                 addToLiveviewData(message.liveview, state);
+            }
+            if (message.apps && Array.isArray(message.apps)) {
+                console.log("Setting state.apps with data:", message.apps);
+                state.apps = message.apps;
+            } else {
+                console.warn("Apps data is missing or invalid:", message.apps);
+                state.apps = []; // Default to an empty array
             }
         },
         // mutations for reconnect methods
