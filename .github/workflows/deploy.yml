@@ -3,7 +3,7 @@ name: Build and Deploy to gh-pages
 on:
   push:
     branches:
-      - main # Triggers when pushing to the main branch
+      - main
 
 jobs:
   build-and-deploy:
@@ -18,12 +18,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20 # Use your Node.js version
+          node-version: 20 # Ensure this matches your local Node.js version
           cache: 'npm'
 
-      # Step 3: Install dependencies
+      # Step 3: Install dependencies with --legacy-peer-deps
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # Step 4: Build the project
       - name: Build Project
@@ -34,5 +34,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # Directory to deploy (built files)
+          publish_dir: ./dist # Directory to deploy
           publish_branch: gh-pages
