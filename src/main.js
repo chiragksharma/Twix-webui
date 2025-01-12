@@ -32,7 +32,7 @@ Vue.use(VueCookies);
 // Demo mode
 if (location.host.includes('.github.io') || (process.env.VUE_APP_DEMO_MODE !== undefined && process.env.VUE_APP_DEMO_MODE == 'true')) {
     store.commit('SOCKET_ONMESSAGE', demoJSON);
-    console.log("JSON",demoJSON)
+    console.log("Demo mode enabled. Using mock JSON data:", demoJSON);
     Vue.prototype.$demoMode = true;
 }
 // Prod mode

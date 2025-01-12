@@ -457,6 +457,7 @@ export default new Vuex.Store({
     mutations: {
         SOCKET_ONOPEN(state, event) {
             Vue.prototype.$socket = event.currentTarget;
+            console.log("Ok so socket is connected: ",Vue.prototype.$socket )
             state.socket.isConnected = true;
             // Send Ping!?
             pingInterval = setInterval(() => {
@@ -472,8 +473,8 @@ export default new Vuex.Store({
         },
         // default handler called for all methods
         SOCKET_ONMESSAGE(state, message) {
-            // console.log(state);
-            // console.log(message);
+            console.log("This is the state which we recieved from the ",state);
+            console.log("This is the message recieved: ",message);
             // Log
             if (message.log) {
                 addToLogData(message.log, state);

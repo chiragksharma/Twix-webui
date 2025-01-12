@@ -79,18 +79,7 @@
             </v-col>
           </v-row>
   
-          <!-- Frame Order -->
-          <v-row v-if="autoTransition">
-            <v-col cols="12">
-              <h4>Frame Order</h4>
-              <Draggable v-model="apps" :group="{ name: 'frames' }" item-key="frameType">
-                <template #item="{ element, index }">
-                  <v-chip class="ma-2" outlined>{{ index + 1 }}. {{ element.name }}</v-chip>
-                </template>
-              </Draggable>
-            </v-col>
-          </v-row>
-  
+         
           <!-- Single Frame Selection -->
           <v-row v-else>
             <v-col cols="12">
@@ -133,13 +122,11 @@
   
   <script>
   import GenericDrawer from "../components/drawers/GenericDrawer.vue";
-  import { Draggable } from "vue-draggable-next";
   
   export default {
     name: "Apps",
     components: {
       GenericDrawer,
-      Draggable,
     },
     data() {
       return {
